@@ -1,11 +1,13 @@
 from aiogram import F, Router
 from aiogram.types import CallbackQuery
+from app.keyboards import back_menu
 
 router = Router()
 
 
 @router.callback_query(F.data == "info")
 async def instruction(callback: CallbackQuery):
+    await callback.message.delete()
     await callback.message.answer(
         "📖 <b>Как пользоваться TechSpec AI</b>\n\n"
         "1. Нажмите <b>«🚀 Создать новое ТЗ»</b>.\n"
@@ -22,7 +24,7 @@ async def instruction(callback: CallbackQuery):
         "• дополнительные пожелания;\n"
         "• рекомендации по реализации.\n\n"
         "💡 Чем подробнее вы отвечаете на вопросы, тем качественнее получится итоговое техническое задание.",
-        parse_mode="HTML"
+        parse_mode="HTML", reply_markup=back_menu
     )
 
     await callback.answer()

@@ -32,3 +32,9 @@ def get_main_menu(is_admin: bool = False) -> InlineKeyboardMarkup:
         )
 
     return InlineKeyboardMarkup(inline_keyboard=keyboard)
+
+back_menu = InlineKeyboardMarkup(
+    keyboard = [
+        InlineKeyboardButton(text="Назад", callback_data="back_menu")
+    ]
+)
