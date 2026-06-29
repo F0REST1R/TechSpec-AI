@@ -1,8 +1,9 @@
 from aiogram import Router
 from aiogram.filters import CommandStart
 from aiogram.types import Message
+from app.config import config
 
-from app.keyboards.main_menu import main_menu
+from app.keyboards.main_menu import get_main_menu
 
 router = Router()
 
@@ -18,5 +19,7 @@ async def start(message: Message):
 
     await message.answer(
         text=text,
-        reply_markup=main_menu,
+        reply_markup=get_main_menu(
+            is_admin=message.from_user.id in config.admin_ids
+        ),
     )

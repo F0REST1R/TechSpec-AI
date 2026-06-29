@@ -1,18 +1,34 @@
-from aiogram.types import (
-    KeyboardButton,
-    ReplyKeyboardMarkup,
-)
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 
-main_menu = ReplyKeyboardMarkup(
-    keyboard=[
+def get_main_menu(is_admin: bool = False) -> InlineKeyboardMarkup:
+    keyboard = [
         [
-            KeyboardButton(text="📝 Создать ТЗ"),
+            InlineKeyboardButton(
+                text="🚀 Создать новое ТЗ",
+                callback_data="create_tz",
+            ),
         ],
         [
-            KeyboardButton(text="📂 Мои проекты"),
-            KeyboardButton(text="ℹ️ Информация"),
+            InlineKeyboardButton(
+                text="📁 Мои проекты",
+                callback_data="projects",
+            ),
+            InlineKeyboardButton(
+                text="ℹ️ Инструкция",
+                callback_data="info",
+            ),
         ],
-    ],
-    resize_keyboard=True,
-)
+    ]
+
+    if is_admin:
+        keyboard.append(
+            [
+                InlineKeyboardButton(
+                    text="📢 Сделать рассылку",
+                    callback_data="mailing",
+                ),
+            ]
+        )
+
+    return InlineKeyboardMarkup(inline_keyboard=keyboard)
