@@ -3,39 +3,46 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+
     container_name: techspec-ai
+
     restart: unless-stopped
-    env_file:
-      - .env
+
     depends_on:
       - redis
+
     volumes:
       - ./:/app
-      - sqlite_data:/app/data
+      - ./generated:/app/generated
+      - ./data:/app/data
+
     command: python main.py
+
     networks:
       - techspec-network
 
   redis:
     image: redis:7-alpine
+
     container_name: techspec-redis
+
     restart: unless-stopped
+
     command: redis-server --appendonly yes
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
-      timeout: 3s
-      retries: 5
+
     volumes:
       - redis_data:/data
+
     ports:
       - "6379:6379"
+
     networks:
       - techspec-network
 
 volumes:
   redis_data:
   sqlite_data:
+  generated_data:
 
 networks:
   techspec-network:

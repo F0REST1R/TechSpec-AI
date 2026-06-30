@@ -18,6 +18,10 @@ COPY . .
 
 # ---- Non-root user (security) ----
 RUN useradd -m appuser
+
+RUN mkdir -p /app/generated /app/data \
+    && chown -R appuser:appuser /app/generated /app/data
+
 USER appuser
 
 CMD ["python", "main.py"]

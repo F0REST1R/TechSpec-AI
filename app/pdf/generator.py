@@ -169,7 +169,7 @@ def create_pdf(
     filename: str,
 ):
 
-    output_dir = BASE_DIR.parent.parent / "generated"
+    output_dir = Path("/app/generated")
 
     output_dir.mkdir(
         parents=True,
