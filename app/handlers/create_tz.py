@@ -97,7 +97,7 @@ async def answer_question(
 
         data = await state.get_data()
 
-        processing_message = await message.answer(
+        await message.answer(
             "🧠 Анализирую ответы..."
         )
 
@@ -107,7 +107,8 @@ async def answer_question(
             answers=data["answers"],
         )
 
-        await processing_message.edit_text(
+        await message.delete()
+        await message.answer(
             "📄 Формирую PDF..."
         )
 
@@ -118,7 +119,7 @@ async def answer_question(
             filename,
         )
 
-        await processing_message.delete()
+        await message.delete()
         await message.answer_document(
             document=FSInputFile(pdf_path),
             caption="✅ Техническое задание успешно сформировано.",
