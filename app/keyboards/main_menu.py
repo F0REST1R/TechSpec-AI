@@ -42,3 +42,14 @@ back_menu = InlineKeyboardMarkup(
         ]
     ]
 )
+
+pdf_menu = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [
+            InlineKeyboardButton(
+                text="🏠 Главное меню",
+                callback_data="pdf_back_menu",
+            )
+        ]
+    ]
+)

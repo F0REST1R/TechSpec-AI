@@ -3,7 +3,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Message, FSInputFile
 from app.ai.deepseek import generate_questions, generate_specification
 
-from app.keyboards.main_menu import back_menu
+from app.keyboards.main_menu import back_menu, pdf_menu
 from app.states.create_tz import CreateTZ
 from app.pdf.generator import create_pdf
 from pathlib import Path
@@ -97,7 +97,7 @@ async def answer_question(
 
         data = await state.get_data()
 
-        await message.answer(
+        processing_message = await message.answer(
             "🧠 Анализирую ответы..."
         )
 
@@ -107,7 +107,7 @@ async def answer_question(
             answers=data["answers"],
         )
 
-        await message.answer(
+        await processing_message.edit_text(
             "📄 Формирую PDF..."
         )
 
@@ -118,9 +118,11 @@ async def answer_question(
             filename,
         )
 
+        await processing_message.delete()
         await message.answer_document(
             document=FSInputFile(pdf_path),
             caption="✅ Техническое задание успешно сформировано.",
+            reply_markup=pdf_menu,
         )
 
         Path(pdf_path).unlink(missing_ok=True)

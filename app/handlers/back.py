@@ -10,3 +10,8 @@ async def back_menu(callback: CallbackQuery):
     await callback.message.delete()
     await start(callback.message)
     await callback.answer()
+
+@router.callback_query(F.data == "pdf_back_menu")
+async def back_menu(callback: CallbackQuery):
+    await start(callback.message)
+    await callback.answer()
