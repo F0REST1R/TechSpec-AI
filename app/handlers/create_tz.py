@@ -1,10 +1,12 @@
 from aiogram import F, Router
 from aiogram.fsm.context import FSMContext
-from aiogram.types import CallbackQuery, Message
+from aiogram.types import CallbackQuery, Message, FSInputFile
 from app.ai.deepseek import generate_questions, generate_specification
 
 from app.keyboards.main_menu import back_menu
 from app.states.create_tz import CreateTZ
+from app.pdf.generator import create_pdf
+from pathlib import Path
 
 router = Router()
 
@@ -95,20 +97,35 @@ async def answer_question(
 
         data = await state.get_data()
 
+        await message.answer(
+            "🧠 Анализирую ответы..."
+        )
+
         specification = await generate_specification(
             description=data["description"],
             questions=data["questions"],
             answers=data["answers"],
         )
 
-        await state.update_data(
-            specification=specification,
+        await message.answer(
+            "📄 Формирую PDF..."
         )
 
-        await message.answer(
+        filename = f"tz_{message.from_user.id}.pdf"
+
+        pdf_path = create_pdf(
             specification,
-            parse_mode=None,
+            filename,
         )
+
+        await message.answer_document(
+            document=FSInputFile(pdf_path),
+            caption="✅ Техническое задание успешно сформировано.",
+        )
+
+        Path(pdf_path).unlink(missing_ok=True)
+
+        await state.clear()
 
         return
 
